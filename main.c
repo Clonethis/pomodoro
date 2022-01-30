@@ -7,13 +7,14 @@
 
 // #include "audioPlay.h"
 
-typedef enum { PAUSE = 0, PAUSE_LONG = 1, POMODORO = 2, REPETITION = 3 } MODE;
+int repetition = 4;
+typedef enum { PAUSE = 0, PAUSE_LONG = 1, POMODORO = 2 } MODE;
+int timeArray[] = {5, 15, 25};
 
 char *names[] = {
     "Pause",
     "Long puase",
     "Pomodoro",
-    "Repetition",
 };
 
 char *name(MODE m) { return names[m]; }
@@ -33,12 +34,10 @@ void play_bell(MODE m) {
   case POMODORO:
     printf("\a");
     break;
-  case REPETITION:
-    break;
   }
 }
 
-void run(WINDOW *w, MODE m, int timeArray[]) {
+void run(WINDOW *w, MODE m) {
   nodelay(w, TRUE);
 
   for (int msec = timeArray[m] * 60 * 1000; msec >= 0; msec--) {
@@ -80,7 +79,6 @@ int main(int argc, char *argv[]) {
   int temp;
   int option;
   int option_index = 0;
-  int timeArray[] = {5, 15, 25, 4};
   struct option long_options[] = {{"pomodoro", required_argument, 0, 'p'},
                                   {"short", required_argument, 0, 's'},
                                   {"pomodoro", required_argument, 0, 'l'},
@@ -99,7 +97,7 @@ int main(int argc, char *argv[]) {
     timeArray[PAUSE_LONG] = temp;
   case 'r':
     temp = atoi(optarg);
-    timeArray[REPETITION] = temp;
+    repetition = temp;
   }
   // FILE* file;
 
@@ -120,18 +118,18 @@ int main(int argc, char *argv[]) {
   while (program_run) {
     printw("Looping \n");
 
-    for (int i = 0; i < timeArray[REPETITION]; i++) {
-      run(w, POMODORO, timeArray);
+    for (int i = 0; i < repetition; i++) {
+      run(w, POMODORO);
 
-      if (i == timeArray[REPETITION] - 1) {
+      if (i == repetition - 1) {
         program_run = false;
         break;
       }
 
-      run(w, PAUSE, timeArray);
+      run(w, PAUSE);
     }
 
-    run(w, PAUSE_LONG, timeArray);
+    run(w, PAUSE_LONG);
   }
 
   endwin();
