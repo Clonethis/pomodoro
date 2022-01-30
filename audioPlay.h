@@ -1,8 +1,13 @@
 #ifndef AUDIO
 #define AUDIO
 
-#include "./bass24-osx/bass.h"
-void playAudio();
+#include <stdbool.h>
 
+#include "bass.h"
+
+int initAudio(); // check for 1 -> error
+void deinitAudio();
+bool isPlaying(DWORD chan);
+DWORD playAudio(char *filepath);
 
 #endif
