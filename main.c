@@ -6,6 +6,8 @@
 #include <termios.h>
 #include <stdbool.h>
 
+#include "audioPlay.c"
+
 const int PAUSE_MIN = 5;
 const int PAUSE_LONG_MIN = 15;
 const int POMODORO_MIN = 25;
@@ -44,6 +46,8 @@ void waitJirka(){
   fflush(stdin);
 }
 int main(void) {
+  initscr();
+  cbreak();
   bool program_run = true;
   setup_nonbuffering_IO();
 
@@ -75,6 +79,6 @@ int main(void) {
        waitJirka();
 
   }
-
+  endwin();
   return 0;
 }

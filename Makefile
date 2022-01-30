@@ -4,7 +4,7 @@ ASAN_SYMBOLIZER_PATH = /usr/local/opt/llvm-symbolizer
 
 all: pomodoro
 	./pomodoro
-pomodoro: main.c
-	gcc $(CFLAGS) main.c -o pomodoro 
+pomodoro: main.c audioPlay.c
+	gcc $(CFLAGS) main.c audioPlay.c -o pomodoro 
 clean:
 	rm pomodoro
