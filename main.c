@@ -1,4 +1,6 @@
 #include "mainHeader.c"
-int main(){
-    
+int main()
+{
+
+    printf
 }
