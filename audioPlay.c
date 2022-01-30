@@ -1,6 +1,8 @@
-#include "./bass24-osx/bass.h"
-#include "mainHeader.h"
+// #include "./bass24-osx/bass.h"
+// #define AUDIO
+// #include "mainHeader.h"
+#include<stdio.h>
 
 void playAudio(){
-printf("I music player, am running");
+    printf("I music player, am running");
 }

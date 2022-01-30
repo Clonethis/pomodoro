@@ -5,8 +5,7 @@
 #include <string.h>
 #include <termios.h>
 #include <stdbool.h>
-
-#include "audioPlay.c"
+#include "audioPlay.h"
 
 const int PAUSE_MIN = 5;
 const int PAUSE_LONG_MIN = 15;
@@ -46,8 +45,9 @@ void waitJirka(){
   fflush(stdin);
 }
 int main(void) {
-  initscr();
-  cbreak();
+  // initscr();
+  // cbreak();
+  // endwin();
   bool program_run = true;
   setup_nonbuffering_IO();
 
@@ -59,6 +59,7 @@ int main(void) {
 
 
       for(int i =0; i<REPETITION_COUNT; i++){
+          playAudio();
           run("Pomodoro:",POMODORO_MIN);
           printf("waiting on enter");
            waitJirka();
@@ -79,6 +80,6 @@ int main(void) {
        waitJirka();
 
   }
-  endwin();
+  // endwin();
   return 0;
 }
