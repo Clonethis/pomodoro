@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "audioPlay.h"
+
 const int REPETITION_COUNT = 4;
 
 typedef enum { PAUSE = 0, PAUSE_LONG = 1, POMODORO = 2 } MODE;
