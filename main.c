@@ -44,6 +44,7 @@ void play_bell(MODE m) {
 }
 
 void run(WINDOW *w, MODE m) {
+
   nodelay(w, TRUE);
 
   for (int sec = 0; sec < duration(m); sec++) {
@@ -63,7 +64,7 @@ void run(WINDOW *w, MODE m) {
   nodelay(w, FALSE);
 
   clear();
-
+  play_bell(m);
   printw("%s ended. Press a key to continue...\n", name(m));
   getch();
 }
