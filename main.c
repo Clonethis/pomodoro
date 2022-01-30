@@ -1,22 +1,20 @@
 #include <curses.h>
+#include <getopt.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <getopt.h>
 
 // #include "audioPlay.h"
 
-
-
-
-typedef enum { PAUSE = 0, PAUSE_LONG = 1, POMODORO = 2 , REPETITION = 3} MODE;
+int repetition = 4;
+typedef enum { PAUSE = 0, PAUSE_LONG = 1, POMODORO = 2 } MODE;
+int timeArray[] = {5, 15, 25};
 
 char *names[] = {
     "Pause",
     "Long puase",
     "Pomodoro",
-    "Repetition",
 };
 
 char *name(MODE m) { return names[m]; }
@@ -36,12 +34,10 @@ void play_bell(MODE m) {
   case POMODORO:
     printf("\a");
     break;
-  case REPETITION:
-    break;
   }
 }
 
-void run(WINDOW *w, MODE m,int timeArray[]) {
+void run(WINDOW *w, MODE m) {
   nodelay(w, TRUE);
 
   for (int msec = timeArray[m] * 60 * 1000; msec >= 0; msec--) {
@@ -114,8 +110,7 @@ switch(option){
       return EXIT_FAILURE;
     };
     timeArray[POMODORO] = temp;
-
-  case's':
+  case 's':
     temp = atoi(optarg);
     check_argument(optarg);
     if(check_argument(optarg)){
@@ -134,7 +129,7 @@ switch(option){
   case'r':
     temp = atoi(optarg);
     check_argument(optarg);
-    timeArray[REPETITION] = temp;
+    repetition = temp;
     if(check_argument(optarg)){
       printf("only numbers\n");
       return EXIT_FAILURE;
@@ -163,18 +158,18 @@ printw("\nReady for pomodoro, press enter to start...");
   while (program_run) {
     printw("Looping \n");
 
-    for (int i = 0; i <= timeArray[REPETITION]; i++) {
-      run(w, POMODORO,timeArray);
+    for (int i = 0; i < repetition; i++) {
+      run(w, POMODORO);
 
-      if (i == timeArray[REPETITION] - 1) {
+      if (i == repetition - 1) {
         program_run = false;
         break;
       }
 
-      run(w, PAUSE,timeArray);
+      run(w, PAUSE);
     }
 
-    run(w, PAUSE_LONG,timeArray);
+    run(w, PAUSE_LONG);
   }
 
   endwin();

@@ -1,29 +1,30 @@
-// // #include "./bass24-osx/bass.h"
-// // #define AUDIO
-// // #include "mainHeader.h"
-// #include<stdio.h>
+#include <stdio.h>
 
-// void playAudio(){
-//     printf("I music player, am running");
-// }
-// int playBGM (char *filename)
-// {
-//    FILE *fptr = fopen (filename, "r");
+#include "audioPlay.h"
+#include "bass.h"
 
-//    if (fptr == NULL)
-//       {
-//          fclose (fptr);
-//          return EXIT_FAILURE;
-//       }
-//    else
-//       {
-         
-//         BASS_Init(-1, 44100, 0, 0, NULL);
-//         BASS_SetVolume(1);
-//         HSAMPLE sample = BASS_SampleLoad(FALSE, filename, 0, 0, 1, BASS_SAMPLE_MONO);
-//         HCHANNEL channel=BASS_SampleGetChannel(sample, FALSE);
-//         BASS_ChannelPlay (channel, FALSE);
-//       }
-//    fclose(fptr);
-//    return EXIT_SUCCESS;
-// }
+int initAudio() {
+  // check the correct BASS was loaded
+  if (HIWORD(BASS_GetVersion()) != BASSVERSION) {
+    return 1;
+  }
+
+  // initialize output device
+  printf("Can't initialize device");
+  if (!BASS_Init(1, 48000, 0, 0, NULL))
+    return 1;
+
+  return 0;
+}
+
+void deinitAudio() { BASS_Free(); }
+
+DWORD playAudio(char *filename) {
+  DWORD chan = BASS_StreamCreateFile(FALSE, filename, 0, 0, 0);
+  if (!chan)
+    /* error happened */;
+
+  BASS_ChannelPlay(chan, FALSE);
+
+  return chan;
+}
