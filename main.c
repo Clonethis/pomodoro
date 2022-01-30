@@ -45,10 +45,11 @@ void play_bell(MODE m) {
 void run(WINDOW *w, MODE m) {
   nodelay(w, TRUE);
 
-  for (int sec = duration(m); sec >= 0; sec--) {
+  for (int msec = duration(m) * 1000; msec >= 0; msec--) {
+    int sec = (msec / 1000) + 1;
     clear();
     printw("%s %d:%02d\n", name(m), sec / 60, sec);
-    sleep(1);
+    usleep(1000);
 
     char c;
     while ((c = getch()) != ERR) {
