@@ -19,37 +19,53 @@ char *names[] = {
 int duration(MODE m) {
   switch (m) {
   case PAUSE:
-    return 5;
+    return 3;
   case PAUSE_LONG:
-    return 15;
+    return 5;
   case POMODORO:
-    return 25;
+    return 5;
   }
 }
 
 char *name(MODE m) { return names[m]; }
 
+void play_bell(MODE m) {
+  switch (m) {
+  case PAUSE:
+    printf("\a \a");
+    break;
+  case PAUSE_LONG:
+    printf("\a \a");
+    break;
+  case POMODORO:
+    printf("\a");
+    break;
+  }
+}
+
 void run(WINDOW *w, MODE m) {
   nodelay(w, TRUE);
 
-  int minutes = duration(m);
-
-  printw("Starting %s\n", name(m));
-  for (int sec = 0; sec < minutes / 5; sec++) {
-    sleep(1);
+  for (int sec = 0; sec < duration(m); sec++) {
     clear();
     printw("%s %d:%02d\n", name(m), sec / 60, sec);
+    sleep(1);
 
     char c;
     while ((c = getch()) != ERR) {
-      if (c == 'q')
+      if (c == 'q') {
         endwin();
-      exit(0);
+        exit(0);
+      }
     }
   }
-  printf("\a%s ended\n", name(m));
 
   nodelay(w, FALSE);
+
+  clear();
+
+  printw("%s ended. Press a key to continue...\n", name(m));
+  getch();
 }
 
 int main(void) {
@@ -58,7 +74,7 @@ int main(void) {
 
   bool program_run = true;
 
-  printw("Starting pomodoro, waiting on enter...\n");
+  printw("Ready for pomodoro, press enter to start...\n");
   getch();
 
   while (program_run) {
@@ -66,8 +82,6 @@ int main(void) {
 
     for (int i = 0; i < REPETITION_COUNT; i++) {
       run(w, POMODORO);
-      printw("waiting on enter\n");
-      getch();
 
       if (i == REPETITION_COUNT - 1) {
         program_run = false;
@@ -75,12 +89,9 @@ int main(void) {
       }
 
       run(w, PAUSE);
-      printw("waiting on enter,to start again\n");
     }
 
     run(w, PAUSE_LONG);
-    printw("nice end\n");
-    getch();
   }
 
   endwin();
