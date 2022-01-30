@@ -6,13 +6,25 @@
 #include <termios.h>
 #include <unistd.h>
 
-const int PAUSE_MIN = 5;
-const int PAUSE_LONG_MIN = 15;
-const int POMODORO_MIN = 25;
+typedef enum { PAUSE, PAUSE_LONG, POMODORO } MODE;
+
+int duration(MODE m) {
+  switch (m) {
+  case PAUSE:
+    return 5;
+  case PAUSE_LONG:
+    return 15;
+  case POMODORO:
+    return 25;
+  }
+}
+
 const int REPETITION_COUNT = 4;
 
-void run(WINDOW *w, char *mode, int minutes) {
+void run(WINDOW *w, char *mode, MODE m) {
   nodelay(w, TRUE);
+
+  int minutes = duration(m);
 
   printw("Starting %s\n", mode);
   for (int sec = 0; sec < minutes / 5; sec++) {
@@ -45,7 +57,7 @@ int main(void) {
     printw("Looping \n");
 
     for (int i = 0; i < REPETITION_COUNT; i++) {
-      run(w, "Pomodoro:", POMODORO_MIN);
+      run(w, "Pomodoro:", POMODORO);
       printw("waiting on enter\n");
       getch();
 
@@ -54,11 +66,11 @@ int main(void) {
         break;
       }
 
-      run(w, "Pause:", PAUSE_MIN);
+      run(w, "Pause:", PAUSE);
       printw("waiting on enter,to start again\n");
     }
 
-    run(w, "PauseLong:", PAUSE_LONG_MIN);
+    run(w, "PauseLong:", PAUSE_LONG);
     printw("nice end\n");
     getch();
   }
