@@ -1,16 +1,13 @@
 #include <curses.h>
+#include <getopt.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <getopt.h>
 
 // #include "audioPlay.h"
 
-
-
-
-typedef enum { PAUSE = 0, PAUSE_LONG = 1, POMODORO = 2 , REPETITION = 3} MODE;
+typedef enum { PAUSE = 0, PAUSE_LONG = 1, POMODORO = 2, REPETITION = 3 } MODE;
 
 char *names[] = {
     "Pause",
@@ -41,7 +38,7 @@ void play_bell(MODE m) {
   }
 }
 
-void run(WINDOW *w, MODE m,int timeArray[]) {
+void run(WINDOW *w, MODE m, int timeArray[]) {
   nodelay(w, TRUE);
 
   for (int msec = timeArray[m] * 60 * 1000; msec >= 0; msec--) {
@@ -78,50 +75,44 @@ void run(WINDOW *w, MODE m,int timeArray[]) {
   getch();
 }
 
-
-
-
-int main(int argc,char* argv[]) {
+int main(int argc, char *argv[]) {
   // delka pauzy, dlouhe pauzy, kratke, pomodora, option bell file
-int temp;
-int option;
-int option_index = 0;
-int timeArray[] = {5,15,25,4};
-struct option long_options[] = {
-    {"pomodoro", required_argument, 0, 'p'},
-    {"short", required_argument, 0, 's'},
-    {"pomodoro", required_argument, 0, 'l'},
-    {"repetition", required_argument, 0, 'r'},
-    {0, 0, 0, 0}
-};
-option = getopt_long(argc, argv, "p:s:l:r:", long_options, &option_index);
-switch(option){
+  int temp;
+  int option;
+  int option_index = 0;
+  int timeArray[] = {5, 15, 25, 4};
+  struct option long_options[] = {{"pomodoro", required_argument, 0, 'p'},
+                                  {"short", required_argument, 0, 's'},
+                                  {"pomodoro", required_argument, 0, 'l'},
+                                  {"repetition", required_argument, 0, 'r'},
+                                  {0, 0, 0, 0}};
+  option = getopt_long(argc, argv, "p:s:l:r:", long_options, &option_index);
+  switch (option) {
   case 'p':
     temp = atoi(optarg);
     timeArray[POMODORO] = temp;
-  case's':
+  case 's':
     temp = atoi(optarg);
     timeArray[PAUSE] = temp;
   case 'l':
     temp = atoi(optarg);
     timeArray[PAUSE_LONG] = temp;
-  case'r':
+  case 'r':
     temp = atoi(optarg);
     timeArray[REPETITION] = temp;
-}
+  }
   // FILE* file;
 
   WINDOW *w = initscr();
   nodelay(w, FALSE);
 
-  printw(
-    "Pomodoro\n \                                       
-# Controls\n \                               
-Press:\n \                                   
-- 'q' for quit\n \                         
-- 's' for skip\n \                          
-\n \                                         
-Ready for pomodoro, press enter to start...");
+  printw("Pomodoro\n"
+         "#Controls\n"
+         "Press:\n"
+         "- 'q' for quit\n"
+         "- 's' for skip\n"
+         "\n"
+         "Ready for pomodoro, press enter to start...");
   getch();
 
   bool program_run = true;
@@ -130,17 +121,17 @@ Ready for pomodoro, press enter to start...");
     printw("Looping \n");
 
     for (int i = 0; i < timeArray[REPETITION]; i++) {
-      run(w, POMODORO,timeArray);
+      run(w, POMODORO, timeArray);
 
       if (i == timeArray[REPETITION] - 1) {
         program_run = false;
         break;
       }
 
-      run(w, PAUSE,timeArray);
+      run(w, PAUSE, timeArray);
     }
 
-    run(w, PAUSE_LONG,timeArray);
+    run(w, PAUSE_LONG, timeArray);
   }
 
   endwin();
