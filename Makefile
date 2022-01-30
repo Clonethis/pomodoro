@@ -3,8 +3,8 @@ ASAN_FLAGS = -fsanitize-address-use-after-return=(runtime) -fno-omit-frame-point
 ASAN_SYMBOLIZER_PATH = /usr/local/opt/llvm-symbolizer
 
 all: pomodoro
-	./pomodoro
-pomodoro: main.c audioPlay.c
-	gcc $(CFLAGS) main.c audioPlay.c -o pomodoro 
+	./pomodoro -p 10 -s 10 -l 10 -r 1
+pomodoro: main.c 
+	gcc $(CFLAGS) main.c -o pomodoro 
 clean:
 	rm pomodoro

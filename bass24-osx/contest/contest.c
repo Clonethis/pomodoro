@@ -5,7 +5,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "bass.h"
+#include "../bass.h"
 
 #ifdef _WIN32 // Windows
 #include <conio.h>
