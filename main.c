@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <curses.h>
+#include <string.h>
 
 const int PAUSE_MIN = 5;
 const int PAUSE_LONG_MIN = 15;
@@ -10,32 +11,34 @@ const int REPETITION_COUNT = 4;
 
 void run(char *mode,int minutes){
     printf("%s\n",mode);
-    sleep(minutes/5);
+    sleep(1);
     printf("Mode ended\n");
-}
-void wait(){
-    int num;
-    while(1){
-        num = getchar()
-
-    }
 }
 
 int main(void) {
-  printf("Hello, World! \a");
+
+  printf("Starting pomodoro, waiting on enter...\n");
+
+
   while(1){
-      getchar();
+      printf("Looping \n");
+        // wait();
       for(int i =0; i<REPETITION_COUNT; i++){
           run("Pomodoro:",POMODORO_MIN);
-          getch();
+          printf("waiting on enter");
+;
             if(i == REPETITION_COUNT-1){
-                break;
+
+              exit(1);
+
             }
           run("Pause:",PAUSE_MIN);
-          getch();
+          printf("waiting on enter,to start again\n");
+
       }
+
         run("PauseLong:",PAUSE_LONG_MIN);
-        getch();
+        printf("nice end\n");
 
   }
 
