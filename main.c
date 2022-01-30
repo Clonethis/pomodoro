@@ -78,13 +78,24 @@ void run(WINDOW *w, MODE m,int timeArray[]) {
   getch();
 }
 
+int check_argument(const char *arg)
+{
+    for (int i = 0; arg[i] != '\0'; i++)
+    {
+        if (arg[i] < '0' || arg[i] > '9')
+        {
+          return 1;
+        }
+    }
+return 0;
+}
 
 
-
+// without args 
 int main(int argc,char* argv[]) {
   // delka pauzy, dlouhe pauzy, kratke, pomodora, option bell file
-int temp;
-int option;
+int temp, option;
+// int err_code;
 int option_index = 0;
 int timeArray[] = {5,15,25,4};
 struct option long_options[] = {
@@ -98,30 +109,53 @@ option = getopt_long(argc, argv, "p:s:l:r:", long_options, &option_index);
 switch(option){
   case 'p':
     temp = atoi(optarg);
+    if(check_argument(optarg)){
+      printf("only numbers\n");
+      return EXIT_FAILURE;
+    };
     timeArray[POMODORO] = temp;
+
   case's':
     temp = atoi(optarg);
+    check_argument(optarg);
+    if(check_argument(optarg)){
+      printf("only numbers\n");
+      return EXIT_FAILURE;
+    };
     timeArray[PAUSE] = temp;
   case 'l':
     temp = atoi(optarg);
+    check_argument(optarg);
     timeArray[PAUSE_LONG] = temp;
+    if(check_argument(optarg)){
+      printf("only numbers\n");
+      return EXIT_FAILURE;
+    };
   case'r':
     temp = atoi(optarg);
+    check_argument(optarg);
     timeArray[REPETITION] = temp;
+    if(check_argument(optarg)){
+      printf("only numbers\n");
+      return EXIT_FAILURE;
+    };
+  default:
+    printf("-s set short pause, \n-r set repetition counter, \n-l set long counter, \n-p length of pomodoro times ");
 }
   // FILE* file;
 
   WINDOW *w = initscr();
+  printw(
+    "\nPomodoro\n \
+# Controls\n \
+Press:\n \
+- 'q' for quit\n \
+- 's' for skip\n \
+\n ");
+printw("Usage: ./pomodoro -s -r -t -p\n-s set short pause, \n-r set repetition counter, \n-l set long counter, \n-p length of pomodoro times\n");
+printw("\nReady for pomodoro, press enter to start...");
   nodelay(w, FALSE);
 
-  printw(
-    "Pomodoro\n \                                       
-# Controls\n \                               
-Press:\n \                                   
-- 'q' for quit\n \                         
-- 's' for skip\n \                          
-\n \                                         
-Ready for pomodoro, press enter to start...");
   getch();
 
   bool program_run = true;
@@ -129,7 +163,7 @@ Ready for pomodoro, press enter to start...");
   while (program_run) {
     printw("Looping \n");
 
-    for (int i = 0; i < timeArray[REPETITION]; i++) {
+    for (int i = 0; i <= timeArray[REPETITION]; i++) {
       run(w, POMODORO,timeArray);
 
       if (i == timeArray[REPETITION] - 1) {
