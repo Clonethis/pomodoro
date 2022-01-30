@@ -1,9 +1,6 @@
 #include <curses.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <termios.h>
 #include <unistd.h>
 
 const int REPETITION_COUNT = 4;
@@ -44,10 +41,9 @@ void play_bell(MODE m) {
 }
 
 void run(WINDOW *w, MODE m) {
-
   nodelay(w, TRUE);
 
-  for (int sec = 0; sec < duration(m); sec++) {
+  for (int sec = duration(m); sec >= 0; sec--) {
     clear();
     printw("%s %d:%02d\n", name(m), sec / 60, sec);
     sleep(1);
