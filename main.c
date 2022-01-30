@@ -5,8 +5,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-// #include "audioPlay.h"
+#include "audioPlay.h"
+#include "bass.h"
 
+char *bell_sound_path = "BestSoundEver.mp3";
 int repetition = 4;
 typedef enum { PAUSE = 0, PAUSE_LONG = 1, POMODORO = 2 } MODE;
 int timeArray[] = {5, 15, 25};
@@ -19,20 +21,20 @@ char *names[] = {
 
 char *name(MODE m) { return names[m]; }
 
+void play_sound() { DWORD chan = playAudio(bell_sound_path); }
+
 void play_bell(MODE m) {
   switch (m) {
   case PAUSE:
-    printf("\a");
-    usleep(500000);
-    printf("\a");
+    play_sound();
+    play_sound();
     break;
   case PAUSE_LONG:
-    printf("\a");
-    usleep(500000);
-    printf("\a");
+    play_sound();
+    play_sound();
     break;
   case POMODORO:
-    printf("\a");
+    play_sound();
     break;
   }
 }
@@ -40,7 +42,7 @@ void play_bell(MODE m) {
 void run(WINDOW *w, MODE m) {
   nodelay(w, TRUE);
 
-  for (int msec = timeArray[m] * 60 * 1000; msec >= 0; msec--) {
+  for (int msec = timeArray[m] * 1 * 1000; msec >= 0; msec--) {
     if (msec % 1000 == 0) {
       clear();
       int sec = msec / 1000;
