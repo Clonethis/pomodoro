@@ -1,6 +1,9 @@
 all: pomodoro
-	gcc main.c -o pomodoro
 	./pomodoro
+
+pomodoro:
+	gcc main.c -o pomodoro
+
 
 clean:
 	rm pomodoro
