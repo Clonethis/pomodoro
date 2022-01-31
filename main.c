@@ -21,28 +21,28 @@ char *names[] = {
 
 char *name(MODE m) { return names[m]; }
 
-void play_sound() { DWORD chan = playAudio(bell_sound_path); }
+// void play_sound() { DWORD chan = playAudio(bell_sound_path); }
 
-void play_bell(MODE m) {
-  switch (m) {
-  case PAUSE:
-    play_sound();
-    play_sound();
-    break;
-  case PAUSE_LONG:
-    play_sound();
-    play_sound();
-    break;
-  case POMODORO:
-    play_sound();
-    break;
-  }
-}
+// void play_bell(MODE m) {
+//   switch (m) {
+//   case PAUSE:
+//     play_sound();
+//     play_sound();
+//     break;
+//   case PAUSE_LONG:
+//     play_sound();
+//     play_sound();
+//     break;
+//   case POMODORO:
+//     play_sound();
+//     break;
+//   }
+// }
 
 void run(WINDOW *w, MODE m) {
   nodelay(w, TRUE);
 
-  for (int msec = timeArray[m] * 1 * 1000; msec >= 0; msec--) {
+  for (int msec = timeArray[m] * 60 * 1000; msec >= 0; msec--) {
     if (msec % 1000 == 0) {
       clear();
       int sec = msec / 1000;
@@ -71,7 +71,7 @@ void run(WINDOW *w, MODE m) {
   nodelay(w, FALSE);
 
   clear();
-  play_bell(m);
+  // play_bell(m);
   printw("%s ended. Press a key to continue...\n", name(m));
   getch();
 }
