@@ -89,11 +89,11 @@ return 0;
 }
 
 
-// without args 
+
 int main(int argc,char* argv[]) {
   // delka pauzy, dlouhe pauzy, kratke, pomodora, option bell file
 int temp, option;
-// int err_code;
+
 int option_index = 0;
 int timeArray[] = {5,15,25,4};
 struct option long_options[] = {
@@ -106,36 +106,29 @@ struct option long_options[] = {
 option = getopt_long(argc, argv, "p:s:l:r:", long_options, &option_index);
 switch(option){
   case 'p':
-    temp = atoi(optarg);
-    if(check_argument(optarg)){
+    if(check_argument(optarg)==1){
       printf("only numbers\n");
       return EXIT_FAILURE;
     };
-    timeArray[POMODORO] = temp;
+    timeArray[POMODORO] = atoi(optarg); 
   case 's':
-    temp = atoi(optarg);
-    check_argument(optarg);
-    if(check_argument(optarg)){
+    if(check_argument(optarg)==1){
       printf("only numbers\n");
       return EXIT_FAILURE;
     };
-    timeArray[PAUSE] = temp;
+    timeArray[PAUSE] = atoi(optarg); 
   case 'l':
-    temp = atoi(optarg);
-    check_argument(optarg);
-    timeArray[PAUSE_LONG] = temp;
-    if(check_argument(optarg)){
+    if(check_argument(optarg)==1){
       printf("only numbers\n");
       return EXIT_FAILURE;
     };
+    timeArray[PAUSE_LONG] = atoi(optarg); 
   case'r':
-    temp = atoi(optarg);
-    check_argument(optarg);
-    repetition = temp;
     if(check_argument(optarg)){
       printf("only numbers\n");
       return EXIT_FAILURE;
     };
+    repetition = atoi(optarg);
   default:
     printf("-s set short pause, \n-r set repetition counter, \n-l set long counter, \n-p length of pomodoro times ");
 }
